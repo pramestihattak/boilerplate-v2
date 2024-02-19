@@ -13,14 +13,29 @@ service Auth {
       body: "*"
     };
   }
+
+  rpc Verification (VerificationRequest) returns (VerificationResponse) {
+    option (google.api.http) = {
+      get: "/v1/auth/verification"
+    };
+  }
 }
 
 message RegisterRequest {
-  string name = 1;
+  string fullname = 1;
   string email = 2;
   string password = 3;
 }
 
 message RegisterResponse {
+  string message = 1;
+}
+
+message VerificationRequest {
+  string email = 1;
+  string verification_token = 2;
+}
+
+message VerificationResponse {
   string message = 1;
 }

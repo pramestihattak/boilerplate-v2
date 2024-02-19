@@ -137,5 +137,66 @@ proto.auth.AuthPromiseClient.prototype.register =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.VerificationRequest,
+ *   !proto.auth.VerificationResponse>}
+ */
+const methodDescriptor_Auth_Verification = new grpc.web.MethodDescriptor(
+  '/auth.Auth/Verification',
+  grpc.web.MethodType.UNARY,
+  proto.auth.VerificationRequest,
+  proto.auth.VerificationResponse,
+  /**
+   * @param {!proto.auth.VerificationRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.auth.VerificationResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.VerificationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.auth.VerificationResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.VerificationResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthClient.prototype.verification =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/auth.Auth/Verification',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Verification,
+      callback);
+};
+
+
+/**
+ * @param {!proto.auth.VerificationRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.auth.VerificationResponse>}
+ *     Promise that resolves to the response
+ */
+proto.auth.AuthPromiseClient.prototype.verification =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/auth.Auth/Verification',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Verification);
+};
+
+
 module.exports = proto.auth;
 

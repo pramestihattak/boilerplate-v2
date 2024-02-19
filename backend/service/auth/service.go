@@ -19,7 +19,7 @@ type AuthService struct {
 	storage *postgres.Storage
 }
 
-func NewAuthService(logger *logrus.Logger, storage *postgres.Storage) *AuthService {
+func NewService(logger *logrus.Logger, storage *postgres.Storage) *AuthService {
 	return &AuthService{
 		logger:  logger,
 		storage: storage,

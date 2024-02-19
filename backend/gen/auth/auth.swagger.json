@@ -47,13 +47,49 @@
           "Auth"
         ]
       }
+    },
+    "/v1/auth/verification": {
+      "get": {
+        "operationId": "Auth_Verification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/authVerificationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "verificationToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Auth"
+        ]
+      }
     }
   },
   "definitions": {
     "authRegisterRequest": {
       "type": "object",
       "properties": {
-        "name": {
+        "fullname": {
           "type": "string"
         },
         "email": {
@@ -65,6 +101,14 @@
       }
     },
     "authRegisterResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "authVerificationResponse": {
       "type": "object",
       "properties": {
         "message": {

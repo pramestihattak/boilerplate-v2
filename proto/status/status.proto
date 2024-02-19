@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "/status";
+
+package status;
+
+message StatusResponse {
+  string status_code = 1 [json_name = "status_code"];
+  string status_desc = 2 [json_name = "status_desc"];
+}

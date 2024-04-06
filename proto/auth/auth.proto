@@ -14,15 +14,28 @@ service Auth {
     };
   }
 
+  rpc Login (LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/auth/login"
+      body: "*"
+    };
+  }
+
   rpc Verification (VerificationRequest) returns (VerificationResponse) {
     option (google.api.http) = {
       get: "/v1/auth/verification"
     };
   }
+
+  rpc Me (MeRequest) returns (MeResponse) {
+    option (google.api.http) = {
+      get: "/v1/auth/me"
+    };
+  }
 }
 
 message RegisterRequest {
-  string fullname = 1;
+  string full_name = 1;
   string email = 2;
   string password = 3;
 }
@@ -31,11 +44,27 @@ message RegisterResponse {
   string message = 1;
 }
 
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
 message VerificationRequest {
   string email = 1;
   string verification_token = 2;
 }
 
 message VerificationResponse {
+  string message = 1;
+}
+
+message MeRequest {
+}
+
+message MeResponse {
   string message = 1;
 }

@@ -7,20 +7,19 @@ import (
 	grpc_status "google.golang.org/grpc/status"
 )
 
-func ResponseFromCode(code StatusCode) pb.StatusResponse {
+func ResponseFromCode(code StatusCode) *pb.StatusResponse {
 	var res pb.StatusResponse
 	if len(code) == StatusCodeLen {
-		if res2, ok := statusMap[code]; ok {
-			res = res2
+		if statusMap[code].StatusDesc != "" {
+			res.StatusDesc = statusMap[code].StatusDesc
 			res.StatusCode = string(code)
-			return res
+			return &res
 		}
 	}
 
-	// generic
-	res = statusMap[SystemErrCode_Generic]
+	res.StatusDesc = statusMap[SystemErrCode_Generic].StatusDesc
 	res.StatusCode = string(SystemErrCode_Generic)
-	return res
+	return &res
 }
 
 // ResponseFromCodeToErr accepts StatusCode and converts it to an grpc error message.
@@ -44,7 +43,7 @@ func ResponseFromCodeToErr(code StatusCode) error {
 	}
 
 	st := grpc_status.New(grpcCode, grpcMessage)
-	if st2, err := st.WithDetails((&statRes)); err == nil {
+	if st2, err := st.WithDetails((statRes)); err == nil {
 		st = st2 // if err != nil, this just skips adding the details on the response.
 	}
 	return st.Err()

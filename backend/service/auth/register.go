@@ -37,7 +37,7 @@ func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 	}
 
 	userID, err := s.storage.Register(ctx, storage.Register{
-		FullName:          req.GetFullname(),
+		FullName:          req.GetFullName(),
 		Email:             req.GetEmail(),
 		Password:          hashedPassword,
 		VerificationToken: util.RandomStringGenerator(10),

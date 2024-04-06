@@ -4,6 +4,7 @@ import (
 	"context"
 
 	pb "boilerplate-v2/gen/auth"
+	jwtPackage "boilerplate-v2/pkg/jwt"
 	"boilerplate-v2/storage/postgres"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -17,12 +18,14 @@ type AuthService struct {
 	pb.UnimplementedAuthServer
 	logger  *logrus.Logger
 	storage *postgres.Storage
+	jwt     *jwtPackage.JWT
 }
 
-func NewService(logger *logrus.Logger, storage *postgres.Storage) *AuthService {
+func NewService(logger *logrus.Logger, storage *postgres.Storage, jwt *jwtPackage.JWT) *AuthService {
 	return &AuthService{
 		logger:  logger,
 		storage: storage,
+		jwt:     jwt,
 	}
 }
 

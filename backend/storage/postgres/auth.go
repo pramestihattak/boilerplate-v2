@@ -41,6 +41,16 @@ var (
 		WHERE email = $1
 		RETURNING user_id
 	`
+
+	loginSQL = `
+		SELECT 
+			user_id,
+			full_name,
+			email,
+			password
+		FROM users
+		WHERE email = $1;
+	`
 )
 
 func (s *Storage) Register(ctx context.Context, reg storage.Register) (string, error) {
@@ -56,9 +66,6 @@ func (s *Storage) Register(ctx context.Context, reg storage.Register) (string, e
 		reg.Password,
 		reg.VerificationToken,
 	).Scan(&id); err != nil {
-		if err == sql.ErrNoRows {
-			return "", nil
-		}
 		if err := txn.Rollback(); err != nil {
 			return "", errors.Wrap(err, "failed to register, can't rollback transaction")
 		}
@@ -114,4 +121,21 @@ func (s *Storage) VerifyUser(ctx context.Context, email string) (string, error) 
 		return "", errors.Wrap(err, "failed to verify, can't commit transaction")
 	}
 	return id, nil
+}
+
+func (s *Storage) Login(ctx context.Context, input *storage.LoginInput) (*storage.LoginOutput, error) {
+	var output storage.LoginOutput
+	if err := s.db.QueryRowContext(ctx, loginSQL, input.Email).Scan(
+		&output.UserID,
+		&output.FullName,
+		&output.Email,
+		&output.Password,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &output, nil
 }

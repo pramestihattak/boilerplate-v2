@@ -140,6 +140,67 @@ proto.auth.AuthPromiseClient.prototype.register =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.LoginRequest,
+ *   !proto.auth.LoginResponse>}
+ */
+const methodDescriptor_Auth_Login = new grpc.web.MethodDescriptor(
+  '/auth.Auth/Login',
+  grpc.web.MethodType.UNARY,
+  proto.auth.LoginRequest,
+  proto.auth.LoginResponse,
+  /**
+   * @param {!proto.auth.LoginRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.auth.LoginResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.LoginRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.auth.LoginResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.LoginResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthClient.prototype.login =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/auth.Auth/Login',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Login,
+      callback);
+};
+
+
+/**
+ * @param {!proto.auth.LoginRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.auth.LoginResponse>}
+ *     Promise that resolves to the response
+ */
+proto.auth.AuthPromiseClient.prototype.login =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/auth.Auth/Login',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Login);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.auth.VerificationRequest,
  *   !proto.auth.VerificationResponse>}
  */
@@ -195,6 +256,67 @@ proto.auth.AuthPromiseClient.prototype.verification =
       request,
       metadata || {},
       methodDescriptor_Auth_Verification);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.auth.MeRequest,
+ *   !proto.auth.MeResponse>}
+ */
+const methodDescriptor_Auth_Me = new grpc.web.MethodDescriptor(
+  '/auth.Auth/Me',
+  grpc.web.MethodType.UNARY,
+  proto.auth.MeRequest,
+  proto.auth.MeResponse,
+  /**
+   * @param {!proto.auth.MeRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.auth.MeResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.auth.MeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.auth.MeResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.auth.MeResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.auth.AuthClient.prototype.me =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/auth.Auth/Me',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Me,
+      callback);
+};
+
+
+/**
+ * @param {!proto.auth.MeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.auth.MeResponse>}
+ *     Promise that resolves to the response
+ */
+proto.auth.AuthPromiseClient.prototype.me =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/auth.Auth/Me',
+      request,
+      metadata || {},
+      methodDescriptor_Auth_Me);
 };
 
 

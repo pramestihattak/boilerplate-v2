@@ -1,16 +1,19 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"strings"
 
+	jwtPackage "boilerplate-v2/pkg/jwt"
 	"boilerplate-v2/service"
 	"boilerplate-v2/service/auth"
 	"boilerplate-v2/storage/postgres"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -39,15 +42,36 @@ func init() {
 		log.Fatalf("error loading configuration: %v", err)
 	}
 
-	if config.GetString("google.clientID") == "" || config.GetString("google.clientSecret") == "" || config.GetString("google.callbackURL") == "" {
-		logger.Fatal("error google credential missing")
-	}
-
 	logger = logrus.New()
 	logger.Formatter = &logrus.JSONFormatter{}
 }
 
 func main() {
+	privateKeyBase64 := config.GetString("jwt.privatePEM")
+	privateKeyBytes, err := base64.StdEncoding.DecodeString(privateKeyBase64)
+	if err != nil {
+		log.Fatal("fail to decode private key", err.Error())
+	}
+	privateKey, err := jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKeyBytes))
+	if err != nil {
+		log.Fatal("fail to parse jwt private key", err.Error())
+	}
+
+	publicKeyBase64 := config.GetString("jwt.publicPEM")
+	publicKeyBytes, err := base64.StdEncoding.DecodeString(publicKeyBase64)
+	if err != nil {
+		log.Fatal("fail to decode public key", err.Error())
+	}
+	publicKey, err := jwt.ParseRSAPublicKeyFromPEM([]byte(publicKeyBytes))
+	if err != nil {
+		log.Fatal("fail to parse jwt public key", err.Error())
+	}
+
+	j := jwtPackage.New(&jwtPackage.NewJWTOptions{
+		PrivateKey: privateKey,
+		PublicKey:  publicKey,
+	})
+
 	storage, err := postgres.NewStorage(logger, config)
 	if err != nil {
 		logger.Fatal("error initializing postgres storage", err.Error())
@@ -61,7 +85,7 @@ func main() {
 	reflection.Register(s)
 
 	service.RegisterServices(s,
-		auth.RegisterService(auth.NewService(logger, storage)),
+		auth.RegisterService(auth.NewService(logger, storage, j)),
 	)
 
 	// start gRPC server

@@ -19,11 +19,6 @@ func (s *AuthService) Me(ctx context.Context, req *pb.MeRequest) (*pb.MeResponse
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedReadMetadata)
 	}
 
-	if len(md["authorization"]) == 0 {
-		logger.Errorf("fail to get user data: %v", "missing bearer token")
-		return nil, status.ResponseFromCodeToErr(status.UserErrCode_MissingBearerToken)
-	}
-
 	auth, err := s.withAuth(md["authorization"][0])
 	if err != nil {
 		logger.Errorf("fail to login user: %v", err.Error())

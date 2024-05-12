@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strings"
 
+	"boilerplate-v2/middleware"
 	jwtPackage "boilerplate-v2/pkg/jwt"
 	"boilerplate-v2/service"
 	"boilerplate-v2/service/auth"
@@ -81,7 +82,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.AuthUnaryServerInterceptor))
 	reflection.Register(s)
 
 	service.RegisterServices(s,

@@ -82,7 +82,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.AuthUnaryServerInterceptor))
+
+	m := middleware.NewMiddleware(j)
+	s := grpc.NewServer(grpc.UnaryInterceptor(m.AuthUnaryServerInterceptor))
 	reflection.Register(s)
 
 	service.RegisterServices(s,

@@ -4,7 +4,9 @@ import (
 	"context"
 
 	pb "boilerplate-v2/gen/auth"
+	"boilerplate-v2/middleware"
 	jwtPackage "boilerplate-v2/pkg/jwt"
+	"boilerplate-v2/status"
 	"boilerplate-v2/storage/postgres"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -41,4 +43,12 @@ func RegisterGateway() func(ctx context.Context, mux *runtime.ServeMux, addr str
 		pb.RegisterAuthHandlerFromEndpoint(ctx, mux, addr, append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(grpcMaxMsgSize), grpc.MaxCallSendMsgSize(grpcMaxMsgSize))))
 		return nil
 	}
+}
+
+func GetUserIDContext(ctx context.Context) (string, error) {
+	userID, ok := ctx.Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		return "", status.ResponseFromCodeToErr(status.SystemErrCode_FailedToGetAuthData)
+	}
+	return userID, nil
 }

@@ -28,6 +28,7 @@ const (
 	SystemErrCode_FailedToVerify      StatusCode = "SC5006"
 	SystemErrCode_FailedToLogin       StatusCode = "SC5007"
 	SystemErrCode_FailedToGetAuthData StatusCode = "SC5008"
+	SystemErrCode_FailedToSetHeader   StatusCode = "SC5009"
 )
 
 var statusMap = map[StatusCode]pb.StatusResponse{
@@ -50,4 +51,5 @@ var statusMap = map[StatusCode]pb.StatusResponse{
 	SystemErrCode_FailedToVerify:      {StatusDesc: "failed to verify user"},
 	SystemErrCode_FailedToLogin:       {StatusDesc: "failed to login"},
 	SystemErrCode_FailedToGetAuthData: {StatusDesc: "failed to get auth data"},
+	SystemErrCode_FailedToSetHeader:   {StatusDesc: "failed to set header"},
 }

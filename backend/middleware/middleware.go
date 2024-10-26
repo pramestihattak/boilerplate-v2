@@ -34,6 +34,8 @@ func NewMiddleware(jwt *jwtPackage.JWT) *Middleware {
 
 func (m *Middleware) AuthUnaryServerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 	var err error
+
+	// register endpoints here based on their request type
 	switch req.(type) {
 	case *pb.MeRequest:
 		ctx, err = m.WithAuth(ctx)

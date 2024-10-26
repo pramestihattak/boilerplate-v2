@@ -10,7 +10,7 @@ import (
 )
 
 func (s *AuthService) Verification(ctx context.Context, req *pb.VerificationRequest) (*pb.VerificationResponse, error) {
-	logger := s.logger.WithField("handler", "Verification")
+	logger := s.Logger.WithField("handler", "Verification")
 	logger.Info("Verification called")
 	_, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
@@ -22,7 +22,7 @@ func (s *AuthService) Verification(ctx context.Context, req *pb.VerificationRequ
 		return nil, status.ResponseFromCodeToErr(status.UserErrCode_VerificationMissingParameters)
 	}
 
-	exist, err := s.storage.CheckedUserForVerification(ctx, req.GetEmail(), req.GetVerificationToken())
+	exist, err := s.Storage.CheckedUserForVerification(ctx, req.GetEmail(), req.GetVerificationToken())
 	if err != nil {
 		logger.Errorf("fail to verify user: %v", err.Error())
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedToVerify)
@@ -33,7 +33,7 @@ func (s *AuthService) Verification(ctx context.Context, req *pb.VerificationRequ
 		return nil, status.ResponseFromCodeToErr(status.UserErrCode_AccountNotFound)
 	}
 
-	userID, err := s.storage.VerifyUser(ctx, req.GetEmail())
+	userID, err := s.Storage.VerifyUser(ctx, req.GetEmail())
 	if err != nil {
 		logger.Errorf("fail to verify user: %v", err.Error())
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedToVerify)

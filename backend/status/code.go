@@ -18,8 +18,9 @@ const (
 	UserErrCode_AccountExist                  StatusCode = "SC4001"
 	UserErrCode_VerificationMissingParameters StatusCode = "SC4002"
 	UserErrCode_AccountNotFound               StatusCode = "SC4003"
-	UserErrCode_LoginWrongPassword            StatusCode = "SC4004"
-	UserErrCode_MissingBearerToken            StatusCode = "SC4005"
+	UserErrCode_AccountNotVerified            StatusCode = "SC4004"
+	UserErrCode_LoginWrongPassword            StatusCode = "SC4005"
+	UserErrCode_MissingBearerToken            StatusCode = "SC4006"
 
 	SystemErrCode_Generic             StatusCode = "SC5000"
 	SystemErrCode_FailedReadMetadata  StatusCode = "SC5002"
@@ -42,6 +43,7 @@ var statusMap = map[StatusCode]pb.StatusResponse{
 	UserErrCode_AccountNotFound:               {StatusDesc: "account not found"},
 	UserErrCode_LoginWrongPassword:            {StatusDesc: "wrong password"},
 	UserErrCode_MissingBearerToken:            {StatusDesc: "missing bearer token"},
+	UserErrCode_AccountNotVerified:            {StatusDesc: "your account is not verified yet"},
 
 	// 5XXX - system errors
 	SystemErrCode_Generic:             {StatusDesc: "generic system error"},

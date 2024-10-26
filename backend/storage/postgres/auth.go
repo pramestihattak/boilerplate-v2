@@ -4,8 +4,6 @@ import (
 	"context"
 	"database/sql"
 
-	"boilerplate-v2/storage"
-
 	"github.com/pkg/errors"
 )
 
@@ -47,13 +45,14 @@ var (
 			user_id,
 			full_name,
 			email,
-			password
+			password,
+			verified
 		FROM users
 		WHERE email = $1;
 	`
 )
 
-func (s *Storage) Register(ctx context.Context, reg storage.Register) (string, error) {
+func (s *Storage) Register(ctx context.Context, reg Register) (string, error) {
 	txn, err := s.db.Begin()
 	if err != nil {
 		return "", errors.Wrap(err, "failed to register, can't init transaction")
@@ -123,13 +122,14 @@ func (s *Storage) VerifyUser(ctx context.Context, email string) (string, error) 
 	return id, nil
 }
 
-func (s *Storage) Login(ctx context.Context, input *storage.LoginInput) (*storage.LoginOutput, error) {
-	var output storage.LoginOutput
+func (s *Storage) Login(ctx context.Context, input *LoginInput) (*LoginOutput, error) {
+	var output LoginOutput
 	if err := s.db.QueryRowContext(ctx, loginSQL, input.Email).Scan(
 		&output.UserID,
 		&output.FullName,
 		&output.Email,
 		&output.Password,
+		&output.Verified,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil

@@ -5,21 +5,21 @@ import (
 
 	pb "boilerplate-v2/gen/auth"
 	"boilerplate-v2/status"
-	"boilerplate-v2/storage"
+	storage "boilerplate-v2/storage/postgres"
 	"boilerplate-v2/util"
 
 	"google.golang.org/grpc/metadata"
 )
 
 func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	logger := s.logger.WithField("handler", "Register")
+	logger := s.Logger.WithField("handler", "Register")
 	logger.Info("Register called")
 	_, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedReadMetadata)
 	}
 
-	exist, err := s.storage.UserExist(ctx, req.GetEmail())
+	exist, err := s.Storage.UserExist(ctx, req.GetEmail())
 	if err != nil {
 		logger.Errorf("fail to register user: %v", err.Error())
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedToRegister)
@@ -36,7 +36,7 @@ func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedToRegister)
 	}
 
-	userID, err := s.storage.Register(ctx, storage.Register{
+	userID, err := s.Storage.Register(ctx, storage.Register{
 		FullName:          req.GetFullName(),
 		Email:             req.GetEmail(),
 		Password:          hashedPassword,

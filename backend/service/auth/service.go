@@ -18,16 +18,16 @@ const grpcMaxMsgSize = 1024 * 1024 * 50 // 50 mb
 
 type AuthService struct {
 	pb.UnimplementedAuthServer
-	logger  *logrus.Logger
-	storage *postgres.Storage
-	jwt     *jwtPackage.JWT
+	Logger  *logrus.Logger
+	Storage postgres.PostgresStore
+	JWT     jwtPackage.JWTInterface
 }
 
-func NewService(logger *logrus.Logger, storage *postgres.Storage, jwt *jwtPackage.JWT) *AuthService {
+func NewService(logger *logrus.Logger, storage postgres.PostgresStore, jwt *jwtPackage.JWT) *AuthService {
 	return &AuthService{
-		logger:  logger,
-		storage: storage,
-		jwt:     jwt,
+		Logger:  logger,
+		Storage: storage,
+		JWT:     jwt,
 	}
 }
 

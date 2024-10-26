@@ -16,10 +16,6 @@ import (
 
 // Storage provides a wrapper around an sql database and provides
 // required methods for interacting with the database
-type Storage struct {
-	logger logrus.FieldLogger
-	db     *sqlx.DB
-}
 
 func NewStorage(logger logrus.FieldLogger, config *viper.Viper) (*Storage, error) {
 	dbString, err := util.NewDBStringFromConfig(config)
@@ -39,9 +35,13 @@ func NewDbConn(logger logrus.FieldLogger, dbstring string) (*sqlx.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to connect to postgres '%s': %v", dbstring, err)
 	}
-	// TODO: is this a sane default?
-	// The current max_connections in postgres is 100.
 	db.SetMaxOpenConns(50)
 	db.SetConnMaxLifetime(time.Hour)
 	return db, nil
 }
+
+var (
+	_ PostgresStore  = (*Storage)(nil)
+	_ PostgresWriter = (*Storage)(nil)
+	_ PostgresReader = (*Storage)(nil)
+)

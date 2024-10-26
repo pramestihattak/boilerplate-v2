@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"boilerplate-v2/storage"
+	storage "boilerplate-v2/storage/postgres"
 
 	"github.com/golang-jwt/jwt/v5"
 )

@@ -32,12 +32,12 @@ generate-mocks: clean-mocks
 	@for dir in $(DIRS); do \
 		if [[ "$$dir" != *"/gen"* && "$$dir" != *"/frontend"* && "$$dir" != *"/$(OUTPUT_DIR)"* ]] && grep -q "interface" "$$dir"/*.go 2>/dev/null; then \
 			echo "Generating mocks in $$dir"; \
-			mkdir -p "$$dir/$(OUTPUT_DIR)"; \
 			for file in "$$dir"/*.go; do \
 				if ! grep -q "type.*interface" "$$file"; then \
 					echo "Skipping $$file - no interface found"; \
 					continue; \
 				fi; \
+				mkdir -p "$$dir/$(OUTPUT_DIR)"; \
 				$(MOCKGEN) -source "$$file" -destination "$$dir/$(OUTPUT_DIR)/$$(basename $$file .go)_mock.go"; \
 			done \
 		fi \

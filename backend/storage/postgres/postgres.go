@@ -39,9 +39,3 @@ func NewDbConn(logger logrus.FieldLogger, dbstring string) (*sqlx.DB, error) {
 	db.SetConnMaxLifetime(time.Hour)
 	return db, nil
 }
-
-var (
-	_ PostgresStore  = (*Storage)(nil)
-	_ PostgresWriter = (*Storage)(nil)
-	_ PostgresReader = (*Storage)(nil)
-)

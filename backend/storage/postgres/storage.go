@@ -10,6 +10,8 @@ import (
 type Storage struct {
 	logger logrus.FieldLogger
 	db     *sqlx.DB
+
+	PostgresStore
 }
 
 // mockgen -source=storage.go -destination=mock/mock_storage.go

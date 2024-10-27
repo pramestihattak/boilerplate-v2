@@ -1,4 +1,4 @@
-package postgres
+package auth_storage
 
 import (
 	"context"
@@ -13,8 +13,6 @@ type Storage struct {
 
 	PostgresStore
 }
-
-// mockgen -source=storage.go -destination=mock/mock_storage.go
 
 type PostgresStore interface {
 	PostgresWriter

@@ -10,7 +10,7 @@ package mock_jwt
 
 import (
 	jwt "boilerplate-v2/pkg/jwt"
-	postgres "boilerplate-v2/storage/postgres"
+	auth "boilerplate-v2/storage/auth"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
@@ -69,7 +69,7 @@ func (mr *MockJWTInterfaceMockRecorder) IsValidToken(token any) *gomock.Call {
 }
 
 // Sign mocks base method.
-func (m *MockJWTInterface) Sign(data *postgres.LoginOutput) (string, error) {
+func (m *MockJWTInterface) Sign(data *auth.LoginOutput) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Sign", data)
 	ret0, _ := ret[0].(string)
@@ -159,7 +159,7 @@ func (m *MockJWTWriter) EXPECT() *MockJWTWriterMockRecorder {
 }
 
 // Sign mocks base method.
-func (m *MockJWTWriter) Sign(data *postgres.LoginOutput) (string, error) {
+func (m *MockJWTWriter) Sign(data *auth.LoginOutput) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Sign", data)
 	ret0, _ := ret[0].(string)

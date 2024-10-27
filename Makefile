@@ -1,4 +1,4 @@
-generate:
+generate: generate-mocks
 	@protoc -I ./proto \
   		--go_out ./backend/gen --go_opt paths=source_relative \
   		--go-grpc_out ./backend/gen --go-grpc_opt paths=source_relative \
@@ -7,6 +7,8 @@ generate:
  		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:frontend/gen \
 		--openapiv2_out ./backend/gen \
   		./proto/*/*.proto
+	
+	
 
 build-backend:
 	@cd backend && go build -o bin/backend
@@ -46,3 +48,6 @@ generate-mocks: clean-mocks
 # Clean generated mocks
 clean-mocks:
 	find . -type d -name "$(OUTPUT_DIR)" | xargs rm -rf
+
+tests:
+	@cd backend && go test ./... --coverprofile=coverage.out && go tool cover -html=coverage.out

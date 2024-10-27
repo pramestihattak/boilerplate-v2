@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	storage "boilerplate-v2/storage/postgres"
+	storageAuth "boilerplate-v2/storage/auth"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -22,7 +22,7 @@ type JWTReader interface {
 }
 
 type JWTWriter interface {
-	Sign(data *storage.LoginOutput) (string, error)
+	Sign(data *storageAuth.LoginOutput) (string, error)
 }
 
 type JWT struct {
@@ -55,7 +55,7 @@ func New(opts *NewJWTOptions) *JWT {
 	}
 }
 
-func (j *JWT) Sign(data *storage.LoginOutput) (string, error) {
+func (j *JWT) Sign(data *storageAuth.LoginOutput) (string, error) {
 	claims := JWTClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "somecompany",

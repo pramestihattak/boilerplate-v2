@@ -8,7 +8,9 @@ import (
 	jwtMock "boilerplate-v2/pkg/jwt/mock"
 	"boilerplate-v2/service/auth"
 	"boilerplate-v2/status"
-	storageMock "boilerplate-v2/storage/postgres/mock"
+	storageAuthMock "boilerplate-v2/storage/auth/mock"
+
+	// storageAuth "boilerplate-v2/storage/auth"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
@@ -20,7 +22,7 @@ func TestRegister(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockStorage := storageMock.NewMockPostgresStore(ctrl)
+	mockStorage := storageAuthMock.NewMockPostgresStore(ctrl)
 	mockJWT := jwtMock.NewMockJWTInterface(ctrl)
 
 	authService := &auth.AuthService{

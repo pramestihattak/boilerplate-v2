@@ -7,7 +7,7 @@ import (
 	"boilerplate-v2/middleware"
 	jwtPackage "boilerplate-v2/pkg/jwt"
 	"boilerplate-v2/status"
-	"boilerplate-v2/storage/postgres"
+	storageAuth "boilerplate-v2/storage/auth"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/sirupsen/logrus"
@@ -19,11 +19,11 @@ const grpcMaxMsgSize = 1024 * 1024 * 50 // 50 mb
 type AuthService struct {
 	pb.UnimplementedAuthServer
 	Logger  *logrus.Logger
-	Storage postgres.PostgresStore
+	Storage storageAuth.PostgresStore
 	JWT     jwtPackage.JWTInterface
 }
 
-func NewService(logger *logrus.Logger, storage postgres.PostgresStore, jwt *jwtPackage.JWT) *AuthService {
+func NewService(logger *logrus.Logger, storage storageAuth.PostgresStore, jwt *jwtPackage.JWT) *AuthService {
 	return &AuthService{
 		Logger:  logger,
 		Storage: storage,

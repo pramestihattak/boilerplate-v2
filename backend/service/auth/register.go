@@ -5,7 +5,7 @@ import (
 
 	pb "boilerplate-v2/gen/auth"
 	"boilerplate-v2/status"
-	storage "boilerplate-v2/storage/postgres"
+	storageAuth "boilerplate-v2/storage/auth"
 	"boilerplate-v2/util"
 
 	"google.golang.org/grpc/metadata"
@@ -36,7 +36,7 @@ func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedToRegister)
 	}
 
-	userID, err := s.Storage.Register(ctx, storage.Register{
+	userID, err := s.Storage.Register(ctx, storageAuth.Register{
 		FullName:          req.GetFullName(),
 		Email:             req.GetEmail(),
 		Password:          hashedPassword,

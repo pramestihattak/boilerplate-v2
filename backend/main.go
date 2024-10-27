@@ -12,7 +12,7 @@ import (
 	jwtPackage "boilerplate-v2/pkg/jwt"
 	"boilerplate-v2/service"
 	"boilerplate-v2/service/auth"
-	"boilerplate-v2/storage/postgres"
+	storageAuth "boilerplate-v2/storage/auth"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -73,7 +73,7 @@ func main() {
 		PublicKey:  publicKey,
 	})
 
-	storage, err := postgres.NewStorage(logger, config)
+	storage, err := storageAuth.NewStorage(logger, config)
 	if err != nil {
 		logger.Fatal("error initializing postgres storage", err.Error())
 	}

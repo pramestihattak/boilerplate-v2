@@ -8,8 +8,8 @@ import (
 	jwtMock "boilerplate-v2/pkg/jwt/mock"
 	"boilerplate-v2/service/auth"
 	"boilerplate-v2/status"
-	storage "boilerplate-v2/storage/postgres"
-	storageMock "boilerplate-v2/storage/postgres/mock"
+	storageAuth "boilerplate-v2/storage/auth"
+	storageAuthMock "boilerplate-v2/storage/auth/mock"
 	"boilerplate-v2/util"
 
 	"github.com/sirupsen/logrus"
@@ -23,7 +23,7 @@ func TestLogin(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	mockStorage := storageMock.NewMockPostgresStore(ctrl)
+	mockStorage := storageAuthMock.NewMockPostgresStore(ctrl)
 	mockJWT := jwtMock.NewMockJWTInterface(ctrl)
 
 	authService := &auth.AuthService{
@@ -33,13 +33,13 @@ func TestLogin(t *testing.T) {
 	}
 
 	hashedPassword, _ := util.HashAndSalt("password123")
-	user := &storage.LoginOutput{
+	user := &storageAuth.LoginOutput{
 		Email:    "test@example.com",
 		Password: hashedPassword,
 		Verified: true,
 	}
 
-	userNotValidated := &storage.LoginOutput{
+	userNotValidated := &storageAuth.LoginOutput{
 		Email:    "test@example.com",
 		Password: hashedPassword,
 		Verified: false,
@@ -59,7 +59,7 @@ func TestLogin(t *testing.T) {
 				Password: "password123",
 			},
 			setupMocks: func(input *pb.LoginRequest) {
-				mockStorage.EXPECT().Login(gomock.Any(), &storage.LoginInput{
+				mockStorage.EXPECT().Login(gomock.Any(), &storageAuth.LoginInput{
 					Email: input.GetEmail(),
 				}).Return(user, nil)
 				mockJWT.EXPECT().Sign(user).Return("valid_token", nil)
@@ -74,7 +74,7 @@ func TestLogin(t *testing.T) {
 				Password: "password123",
 			},
 			setupMocks: func(input *pb.LoginRequest) {
-				mockStorage.EXPECT().Login(gomock.Any(), &storage.LoginInput{
+				mockStorage.EXPECT().Login(gomock.Any(), &storageAuth.LoginInput{
 					Email: input.GetEmail(),
 				}).Return(userNotValidated, nil)
 			},
@@ -87,7 +87,7 @@ func TestLogin(t *testing.T) {
 				Password: "password123",
 			},
 			setupMocks: func(input *pb.LoginRequest) {
-				mockStorage.EXPECT().Login(gomock.Any(), &storage.LoginInput{
+				mockStorage.EXPECT().Login(gomock.Any(), &storageAuth.LoginInput{
 					Email: input.GetEmail(),
 				}).Return(nil, nil)
 			},
@@ -100,7 +100,7 @@ func TestLogin(t *testing.T) {
 				Password: "password",
 			},
 			setupMocks: func(input *pb.LoginRequest) {
-				mockStorage.EXPECT().Login(gomock.Any(), &storage.LoginInput{
+				mockStorage.EXPECT().Login(gomock.Any(), &storageAuth.LoginInput{
 					Email: input.GetEmail(),
 				}).Return(user, nil)
 			},
@@ -113,7 +113,7 @@ func TestLogin(t *testing.T) {
 				Password: "password",
 			},
 			setupMocks: func(input *pb.LoginRequest) {
-				mockStorage.EXPECT().Login(gomock.Any(), &storage.LoginInput{
+				mockStorage.EXPECT().Login(gomock.Any(), &storageAuth.LoginInput{
 					Email: input.GetEmail(),
 				}).Return(nil, assert.AnError)
 			},

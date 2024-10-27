@@ -19,9 +19,5 @@ func (s *AuthService) Me(ctx context.Context, req *pb.MeRequest) (*pb.MeResponse
 		return nil, err
 	}
 
-	logger = s.Logger.WithField("userId", userID)
-
-	logger.Info("success")
-
 	return &pb.MeResponse{Message: userID}, nil
 }

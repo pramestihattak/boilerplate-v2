@@ -5,7 +5,7 @@ import (
 
 	pb "boilerplate-v2/gen/auth"
 	"boilerplate-v2/status"
-	storage "boilerplate-v2/storage/postgres"
+	storageAuth "boilerplate-v2/storage/auth"
 	"boilerplate-v2/util"
 
 	"google.golang.org/grpc"
@@ -20,7 +20,7 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.Logi
 		return nil, status.ResponseFromCodeToErr(status.SystemErrCode_FailedReadMetadata)
 	}
 
-	user, err := s.Storage.Login(ctx, &storage.LoginInput{
+	user, err := s.Storage.Login(ctx, &storageAuth.LoginInput{
 		Email: req.GetEmail(),
 	})
 	if err != nil {

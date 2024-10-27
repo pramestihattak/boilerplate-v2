@@ -1,4 +1,4 @@
-package postgres
+package auth_storage
 
 type Register struct {
 	UserID            string `db:"user_id"`

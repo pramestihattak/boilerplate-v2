@@ -1,4 +1,4 @@
-package postgres
+package auth_storage
 
 import (
 	"fmt"

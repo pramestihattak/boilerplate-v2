@@ -15,4 +15,7 @@ In this boring weekend, I spent my time creating a boilerplate code to build app
 4. Run `make migrate-up`
 5. If you want to rollback `make migrate-down`
 
+## How to generate mock
+1. `make generate-mock`
+
 2024

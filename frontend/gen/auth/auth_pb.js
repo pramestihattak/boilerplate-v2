@@ -233,7 +233,8 @@ proto.auth.RegisterRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     fullName: jspb.Message.getFieldWithDefault(msg, 1, ""),
     email: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    password: jspb.Message.getFieldWithDefault(msg, 3, "")
+    password: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    phoneNumber: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -282,6 +283,10 @@ proto.auth.RegisterRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {string} */ (reader.readString());
       msg.setPassword(value);
       break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPhoneNumber(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -329,6 +334,13 @@ proto.auth.RegisterRequest.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getPhoneNumber();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
       f
     );
   }
@@ -386,6 +398,24 @@ proto.auth.RegisterRequest.prototype.getPassword = function() {
  */
 proto.auth.RegisterRequest.prototype.setPassword = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string phone_number = 4;
+ * @return {string}
+ */
+proto.auth.RegisterRequest.prototype.getPhoneNumber = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.auth.RegisterRequest} returns this
+ */
+proto.auth.RegisterRequest.prototype.setPhoneNumber = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 

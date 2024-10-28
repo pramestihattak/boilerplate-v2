@@ -41,6 +41,7 @@ func (s *AuthService) Register(ctx context.Context, req *pb.RegisterRequest) (*p
 		Email:             req.GetEmail(),
 		Password:          hashedPassword,
 		VerificationToken: util.RandomStringGenerator(10),
+		PhoneNumber:       req.GetPhoneNumber(),
 	})
 	if err != nil {
 		logger.Errorf("fail to register user: %v", err.Error())

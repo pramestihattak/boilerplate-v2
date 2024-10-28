@@ -13,9 +13,10 @@ var (
 			full_name,
 			email,
 			password,
-			verification_token
+			verification_token,
+			phone_number
 		) VALUES (
-				$1, $2, $3, $4
+				$1, $2, $3, $4, $5
 		) RETURNING user_id`
 )
 
@@ -31,6 +32,7 @@ func (s *Storage) Register(ctx context.Context, reg Register) (string, error) {
 		reg.Email,
 		reg.Password,
 		reg.VerificationToken,
+		reg.PhoneNumber,
 	).Scan(&id); err != nil {
 		if err := txn.Rollback(); err != nil {
 			return "", errors.Wrap(err, "failed to register, can't rollback transaction")

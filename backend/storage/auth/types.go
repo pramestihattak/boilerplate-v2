@@ -6,6 +6,7 @@ type Register struct {
 	Email             string `db:"email"`
 	Password          string `db:"password"`
 	VerificationToken string `db:"verification_token"`
+	PhoneNumber       string `db:"phone_number"`
 }
 
 type LoginInput struct {

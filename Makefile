@@ -7,7 +7,7 @@ generate: generate-mocks
  		--grpc-web_out=import_style=commonjs,mode=grpcwebtext:frontend/gen \
 		--openapiv2_out ./backend/gen \
   		./proto/*/*.proto
-	
+	@$(MAKE) combine-swagger
 	
 
 build-backend:
@@ -48,6 +48,12 @@ generate-mocks: clean-mocks
 # Clean generated mocks
 clean-mocks:
 	find . -type d -name "$(OUTPUT_DIR)" | xargs rm -rf
+
+SWAGGER_FILES := $(wildcard backend/gen/*/*.swagger.json)
+COMBINED_SWAGGER := swagger.json
+
+combine-swagger:
+	swagger-cli bundle -o ./swagger/$(COMBINED_SWAGGER) $(SWAGGER_FILES) && swagger-cli validate ./swagger/$(COMBINED_SWAGGER)
 
 tests:
 	@cd backend && go test ./... --coverprofile=coverage.out && go tool cover -html=coverage.out
